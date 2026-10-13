@@ -1,7 +1,99 @@
 import { RadioButtons } from "./customFields";
 import { useState } from "react";
+import jspdf from "jspdf";
 
 const required = ["name", "email", "phone", "school-name", "title", "position"];
+
+import { jsPDF } from "jspdf";
+
+export function exportPDF(object, isExperienced) {
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
+
+  let cursorY = 25;
+  const margin = 20;
+  const pageWidth = 210;
+
+  // --- Header: Name & Contact ---
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(22);
+  doc.text(object.name || "Untitled Resume", margin, cursorY);
+
+  cursorY += 8;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  const contactText = `${object.email || ""}   |   ${object.phone || ""}`;
+  doc.text(contactText, margin, cursorY);
+
+  // Divider Line
+  cursorY += 6;
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(margin, cursorY, pageWidth - margin, cursorY);
+
+  // --- Section: Education ---
+  cursorY += 12;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+  doc.setTextColor(30, 30, 30);
+  doc.text("EDUCATION", margin, cursorY);
+
+  cursorY += 6;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.text(object["school-name"] || "", margin, cursorY);
+
+  cursorY += 5;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(60, 60, 60);
+  const educationDetails = [
+    object.title ? `Qualification / Title: ${object.title}` : "",
+    object["study-date"] ? `Graduation / Date: ${object["study-date"]}` : "",
+  ]
+    .filter(Boolean)
+    .join("  •  ");
+  doc.text(educationDetails, margin, cursorY);
+
+  // --- Section: Work Experience ---
+  if (isExperienced) {
+    cursorY += 12;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(30, 30, 30);
+    doc.text("WORK EXPERIENCE", margin, cursorY);
+
+    cursorY += 6;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text(object.position || "", margin, cursorY);
+
+    if (object.company) {
+      cursorY += 5;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(60, 60, 60);
+      doc.text(`Company: ${object.company}`, margin, cursorY);
+    }
+
+    const dateRange = [object["start-date"], object["end-date"]]
+      .filter(Boolean)
+      .join(" — ");
+    if (dateRange) {
+      cursorY += 5;
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text(dateRange, margin, cursorY);
+    }
+  }
+  const filename = `${(object.name || "resume").toLowerCase().replace(/\s+/g, "_")}_resume.pdf`;
+  doc.save(filename);
+}
 
 function Main() {
   let [disabled, setDisabled] = useState(true);
@@ -37,7 +129,10 @@ function Main() {
     if (startDate > endDate) {
       obj["exp-date"] =
         "please enter valid dates, start date shall be before the end date";
-      console.log(values["start-date"] + " " + values["end-date"]);
+    }
+    if (Object.keys(obj).length === 0) {
+      console.log(values);
+      exportPDF(values, !disabled);
     }
     setErrors(obj);
   }
@@ -119,7 +214,7 @@ function Main() {
               <div className="message">{errors["title"]}</div>
             </div>
             <div className="field">
-              <div className="dates">
+              <div className="date">
                 <label htmlFor="study-date">Study date</label>
                 <input
                   type="date"
@@ -175,7 +270,7 @@ function Main() {
                 </div>
                 <div className="field">
                   <div className="dates">
-                    <div>
+                    <div class="date">
                       <label htmlFor="start-date">Start date</label>
                       <input
                         type="date"
@@ -187,7 +282,7 @@ function Main() {
                         }}
                       />
                     </div>
-                    <div>
+                    <div class="date">
                       <label htmlFor="end-date">End date</label>
                       <input
                         type="date"

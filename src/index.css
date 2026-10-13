@@ -1,6 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0px;
+  height: 25vh;
+}
+
+header {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  background-color: #7878a9;
+}
+
+header > h3 {
+  padding-left: 5%;
+  font-size: 2rem;
+  box-sizing: border-box;
+}
+
+form {
   padding: 5%;
   background-color: rgb(207 219 219);
+}
+
+form > h3 {
+  font-size: 1.3rem;
+  padding-left: 20px;
+}
+
+legend {
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  font-size: 1.3rem;
 }
 
 .message {
@@ -15,12 +49,26 @@ body {
 }
 
 fieldset {
-  background-color: rgb(229 232 232);
+  background-color: rgb(232 246 246);
   border-radius: 30px;
+  position: relative;
+  padding-top: 50px;
 }
 
 .field > input {
   width: min(100% - 20px, 300px + 5%);
+}
+
+input,
+p,
+label {
+  font-size: 1.2rem;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.message {
+  font-size: 1.1rem;
 }
 
 .fields {
@@ -34,16 +82,28 @@ fieldset {
   gap: 20px;
 }
 
-input {
-  display: block;
+.date {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
 }
 
 .submit-button {
   margin: 15px 30px;
 }
 
+.submit-button > button {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: rgb(103, 103, 252);
+  border-radius: 12px;
+  color: white;
+  border: none;
+}
+
 @media (min-width: 1024px) {
-  body {
+  form {
     padding: 3%;
   }
 
