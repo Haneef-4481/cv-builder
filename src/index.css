@@ -79,6 +79,7 @@ label {
 
 .dates {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
