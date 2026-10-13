@@ -1,0 +1,64 @@
+body {
+  padding: 5%;
+  background-color: rgb(207 219 219);
+}
+
+.message {
+  color: red;
+  font-size: 15px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+}
+
+fieldset {
+  background-color: rgb(229 232 232);
+  border-radius: 30px;
+}
+
+.field > input {
+  width: min(100% - 20px, 300px + 5%);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.dates {
+  display: flex;
+  gap: 20px;
+}
+
+input {
+  display: block;
+}
+
+.submit-button {
+  margin: 15px 30px;
+}
+
+@media (min-width: 1024px) {
+  body {
+    padding: 3%;
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+
+  fieldset:nth-child(3) {
+    grid-column: 1 / span 2;
+  }
+
+  .field > input {
+    width: calc(300px + 10%);
+    margin-top: 10px;
+  }
+}
